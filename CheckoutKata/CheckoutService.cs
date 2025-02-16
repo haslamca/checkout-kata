@@ -2,12 +2,23 @@
 
 public class CheckoutService : ICheckoutService
 {
+    private readonly IItemRepository _itemRepository;
+    private readonly List<Item> _receipt = [];
+
+    public CheckoutService(IItemRepository itemRepository)
+    {
+        _itemRepository = itemRepository;
+    }
+
     public void Scan(string sku)
     {
+        var item = _itemRepository.GetBySku(sku);
+
+        _receipt.Add(item);
     }
 
     public decimal GetTotalPrice()
     {
-        return 0m;
+        return _receipt.Sum(i => i.UnitPrice);
     }
 }

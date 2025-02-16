@@ -11,7 +11,7 @@ public class CheckoutServiceTests
     [SetUp]
     public void Setup()
     {
-        _checkoutService = new CheckoutService();
+        _checkoutService = new CheckoutService(new ItemRepository());
     }
 
     [Test]
