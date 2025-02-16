@@ -12,7 +12,7 @@ public class SpecialOfferRepository : ISpecialOfferRepository
 
     public SpecialOffer? GetBySku(string sku)
     {
-        return null;
+        return _offers.SingleOrDefault(o => o.Sku == sku);
     }
 
     private void InitializeRepository()
