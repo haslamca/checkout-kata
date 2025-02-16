@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using NSubstitute;
 using NUnit.Framework;
 
 namespace CheckoutKata.Tests;
@@ -11,13 +12,14 @@ public class ItemRepositoryTests
     [SetUp]
     public void Setup()
     {
-        _itemRepository = new ItemRepository();
+        _itemRepository = Substitute.For<IItemRepository>();
     }
 
     [Test]
     public void ShouldReturnItemWhenExists()
     {
         var existingSku = "A";
+        _itemRepository.GetBySku(existingSku).Returns(new Item(existingSku, 50m));
 
         var item = _itemRepository.GetBySku(existingSku);
 
@@ -30,6 +32,7 @@ public class ItemRepositoryTests
     public void ShouldReturnNullWhenItemDoesNotExist()
     {
         var nonExistingSku = "X";
+        _itemRepository.GetBySku(nonExistingSku).Returns((Item)null);
 
         var item = _itemRepository.GetBySku(nonExistingSku);
 

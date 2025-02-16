@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using NSubstitute;
 using NUnit.Framework;
 
 namespace CheckoutKata.Tests;
@@ -11,13 +12,16 @@ public class SpecialOfferRepositoryTests
     [SetUp]
     public void Setup()
     {
-        _specialOfferRepository = new SpecialOfferRepository();
+        _specialOfferRepository = Substitute.For<ISpecialOfferRepository>();
     }
 
     [Test]
     public void ShouldReturnOfferWhenExists()
     {
         var existingOfferSku = "A";
+        _specialOfferRepository
+            .GetBySku(existingOfferSku)
+            .Returns(new SpecialOffer(existingOfferSku, 3, 130m));
 
         var offer = _specialOfferRepository.GetBySku(existingOfferSku);
 
@@ -31,6 +35,9 @@ public class SpecialOfferRepositoryTests
     public void ShouldReturnNullWhenOfferDoesNotExist()
     {
         var nonExistingOfferSku = "X";
+        _specialOfferRepository
+            .GetBySku(nonExistingOfferSku)
+            .Returns((SpecialOffer)null);
 
         var offer = _specialOfferRepository.GetBySku(nonExistingOfferSku);
 
