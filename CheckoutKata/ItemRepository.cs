@@ -12,7 +12,7 @@ public class ItemRepository : IItemRepository
 
     public Item? GetBySku(string sku)
     {
-        return null;
+        return _items.SingleOrDefault(i => i.Sku == sku);
     }
 
     private void InitializeRepository()

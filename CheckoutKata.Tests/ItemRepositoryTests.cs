@@ -17,7 +17,22 @@ public class ItemRepositoryTests
     [Test]
     public void ShouldReturnItemWhenExists()
     {
-        var item = _itemRepository.GetBySku("A");
+        var existingSku = "A";
+
+        var item = _itemRepository.GetBySku(existingSku);
+
         Assert.That(item, Is.Not.Null);
+        Assert.That(existingSku, Is.EqualTo(item.Sku));
+        Assert.That(50, Is.EqualTo(item.UnitPrice));
+    }
+
+    [Test]
+    public void ShouldReturnNullWhenItemDoesNotExist()
+    {
+        var nonExistingSku = "X";
+
+        var item = _itemRepository.GetBySku(nonExistingSku);
+
+        Assert.That(item, Is.Null);
     }
 }
