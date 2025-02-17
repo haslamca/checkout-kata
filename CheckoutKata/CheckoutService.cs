@@ -21,10 +21,11 @@ public class CheckoutService : ICheckoutService
             return;
         }
 
-        var item = _itemRepository.GetBySku(sku);
+        var item = _itemRepository.GetBySku(sku.ToUpper());
 
         if (item == null)
         {
+            Console.WriteLine("Invalid SKU.");
             return;
         }
 
