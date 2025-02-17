@@ -33,6 +33,38 @@ public class CheckoutService : ICheckoutService
 
     public decimal GetTotalPrice()
     {
-        return _receipt.Sum(i => i.UnitPrice);
+        var total = 0m;
+
+        var itemGroups = _receipt.GroupBy(i => i.Sku).ToDictionary(i => i.Key, i => i.Count());
+
+        foreach (var itemGroup in itemGroups)
+        {
+            var sku = itemGroup.Key;
+            var quantity = itemGroup.Value;
+
+            var item = _itemRepository.GetBySku(sku);
+            var offer = _specialOfferRepository.GetBySku(sku);
+
+            if (item != null)
+            {
+                if (offer != null && quantity >= offer.Quantity)
+                {
+                    var leftover = quantity % offer.Quantity;
+
+                    if (leftover > 0)
+                    {
+                        total += leftover * item.UnitPrice;
+                    }
+
+                    total += (quantity - leftover) / offer.Quantity * offer.SpecialPrice;
+                }
+                else
+                {
+                    total += quantity * item.UnitPrice;
+                }
+            }
+        }
+
+        return total;
     }
 }
