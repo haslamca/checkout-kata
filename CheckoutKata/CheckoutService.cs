@@ -3,11 +3,15 @@
 public class CheckoutService : ICheckoutService
 {
     private readonly IItemRepository _itemRepository;
+    private readonly ISpecialOfferRepository _specialOfferRepository;
     private readonly List<Item> _receipt = [];
 
-    public CheckoutService(IItemRepository itemRepository)
+    public CheckoutService(
+        IItemRepository itemRepository,
+        ISpecialOfferRepository specialOfferRepository)
     {
         _itemRepository = itemRepository;
+        _specialOfferRepository = specialOfferRepository;
     }
 
     public void Scan(string sku)
