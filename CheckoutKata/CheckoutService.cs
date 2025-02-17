@@ -12,7 +12,17 @@ public class CheckoutService : ICheckoutService
 
     public void Scan(string sku)
     {
+        if (string.IsNullOrEmpty(sku))
+        {
+            return;
+        }
+
         var item = _itemRepository.GetBySku(sku);
+
+        if (item == null)
+        {
+            return;
+        }
 
         _receipt.Add(item);
     }
